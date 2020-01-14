@@ -38,7 +38,7 @@ class ClientsList extends Component {
                     >
                       {client.name}
                       <Link
-                        to={`/clients/edit/${delivery.id}`}
+                        to={`/clients/edit/${client.id}`}
                         className="btn btn-primary"
                       >
                         Edit

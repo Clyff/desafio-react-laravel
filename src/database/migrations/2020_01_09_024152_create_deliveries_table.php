@@ -17,8 +17,8 @@ class CreateDeliveriesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('client_id');
             $table->date('date');
-            $table->string('start');
-            $table->string('end');
+            $table->json('start');
+            $table->json('end');
             $table->timestamps();
         });
     }

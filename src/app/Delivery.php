@@ -12,4 +12,9 @@ class Delivery extends Model
     {
         return $this->belongsTo('App\Client');
     }
+
+    protected $casts = [
+        'start' => 'array',
+        'end' => 'array'
+    ];
 }

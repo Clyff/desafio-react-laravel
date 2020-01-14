@@ -22,4 +22,5 @@ Route::get('deliveries', 'DeliveryController@index');
 Route::post('deliveries', 'DeliveryController@store');
 Route::get('deliveries/edit/{id}', 'DeliveryController@edit');
 Route::post('deliveries/edit/{id}', 'DeliveryController@update');
+Route::get('deliveries/show/{id}', 'DeliveryController@show');
 Route::post('deliveries/destroy/{id}', 'DeliveryController@destroy');

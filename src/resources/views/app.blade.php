@@ -14,5 +14,6 @@
     <div id="app"></div>
 
     <script src="{{ asset('js/app.js') }}"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ env('APP_GOOGLE_API_KEY') }}&libraries=places"></script>
 </body>
 </html>

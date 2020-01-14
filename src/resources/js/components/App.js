@@ -9,6 +9,7 @@ import NewClient from './NewClient'
 import DeliveriesList from './DeliveriesList'
 import EditDelivery from './EditDelivery'
 import NewDelivery from './NewDelivery'
+import SingleDelivery from './SingleDelivery'
 
 class App extends Component {
   render () {
@@ -24,6 +25,7 @@ class App extends Component {
             <Route exact path='/deliveries' component={DeliveriesList} />
             <Route path='/deliveries/create' component={NewDelivery} />
             <Route path='/deliveries/edit/:id' component={EditDelivery} />
+            <Route path='/deliveries/show/:id' component={SingleDelivery} />
           </Switch>
         </div>
       </BrowserRouter>
