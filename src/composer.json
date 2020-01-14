@@ -1,9 +1,9 @@
 {
-    "name": "laravel/laravel",
+    "name": "clyff/desafio-react-laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Desafio",
     "keywords": [
-        "framework",
+        "react",
         "laravel"
     ],
     "license": "MIT",
