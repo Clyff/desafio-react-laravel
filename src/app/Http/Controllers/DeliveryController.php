@@ -31,8 +31,8 @@ class DeliveryController extends Controller
     $validatedData = $request->validate([
       'client_id' => ['required', 'exists:clients,id'],
       'date' => ['required', 'date_format:Y-m-d'],
-      'start' => ['required', 'max:255'],
-      'end' => ['required', 'max:255']
+      'start' => ['required'],
+      'end' => ['required']
     ]);
 
     $delivery = Delivery::create([
@@ -59,6 +59,18 @@ class DeliveryController extends Controller
         'delivery' => $delivery,
         'clients' => $clients
       ]);
+  }
+
+  /**
+   * Show the specified resource.
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function show($id)
+  {
+      $delivery = Delivery::with('client')->find($id);
+
+      return response()->json($delivery);
   }
 
   /**

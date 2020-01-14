@@ -52,9 +52,15 @@ class DeliveriesList extends Component {
                       className='list-group-item d-flex justify-content-between'
                       key={delivery.id}
                     >
-                      {delivery.client.name} | {delivery.date} | {delivery.start} | {delivery.end}
+                      {delivery.client.name} | {delivery.date}
 
                         <form onSubmit={this.handleSubmit(delivery.id)}>
+                          <Link
+                            to={`/deliveries/show/${delivery.id}`}
+                            className="btn btn-primary"
+                          >
+                            Show
+                          </Link>
                           <Link
                             to={`/deliveries/edit/${delivery.id}`}
                             className="btn btn-primary"

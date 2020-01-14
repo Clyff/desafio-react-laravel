@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 
 class NewDelivery extends Component {
   constructor (props) {
@@ -10,10 +11,16 @@ class NewDelivery extends Component {
       date: '',
       start: '',
       end: '',
+      address1: '',
+      address2: '',
       clients: [],
       errors: []
     }
     this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.handleChangeAddress1 = this.handleChangeAddress1.bind(this)
+    this.handleSelectAddress1 = this.handleSelectAddress1.bind(this)
+    this.handleChangeAddress2 = this.handleChangeAddress2.bind(this)
+    this.handleSelectAddress2 = this.handleSelectAddress2.bind(this)
     this.handleCreateNewDelivery = this.handleCreateNewDelivery.bind(this)
     this.hasErrorFor = this.hasErrorFor.bind(this)
     this.renderErrorFor = this.renderErrorFor.bind(this)
@@ -35,6 +42,40 @@ class NewDelivery extends Component {
     this.setState({
       [event.target.name]: event.target.value
     })
+  }
+
+  handleChangeAddress1 (address) {
+    this.setState({ address1: address });
+  };
+
+  handleSelectAddress1 (address) {
+    geocodeByAddress(address)
+      .then(results => {
+        var result = results[0];
+
+        this.setState({
+          address1: result.formatted_address,
+          start: result
+        });
+      })
+      .catch(error => console.error('Error', error))
+  }
+
+  handleChangeAddress2 (address) {
+    this.setState({ address2: address });
+  };
+
+  handleSelectAddress2 (address) {
+    geocodeByAddress(address)
+      .then(results => {
+        var result = results[0];
+
+        this.setState({
+          address2: result.formatted_address,
+          end: result
+        });
+      })
+      .catch(error => console.error('Error', error))
   }
 
   handleCreateNewDelivery (event) {
@@ -122,28 +163,74 @@ class NewDelivery extends Component {
                   </div>
 
                   <div className='form-group'>
-                    <label htmlFor='start'>Start</label>
-                    <input
-                      id='start'
-                      type='text'
-                      className={`form-control ${this.hasErrorFor('start') ? 'is-invalid' : ''}`}
-                      name='start'
-                      value={this.state.start}
-                      onChange={this.handleFieldChange}
-                    />
+                    <label htmlFor='address1'>Start</label>
+                    <PlacesAutocomplete
+                      id='address1'
+                      value={this.state.address1}
+                      onChange={this.handleChangeAddress1}
+                      onSelect={this.handleSelectAddress1}
+                    >
+                      {({ getInputProps, suggestions, getSuggestionItemProps }) => (
+                        <div>
+                          <input
+                            {...getInputProps({
+                              placeholder: 'Search Places ...',
+                              className: 'location-search-input form-control' + (this.hasErrorFor('start') ? ' is-invalid' : '')
+                            })}
+                          />
+                          <div className="autocomplete-dropdown-container">
+                            {suggestions.map(suggestion => {
+                              const className = suggestion.active ? 'suggestion-item--active' : 'suggestion-item';
+                              // inline style for demonstration purpose
+                              const style = suggestion.active
+                                          ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                          : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                              return (
+                                <div {...getSuggestionItemProps(suggestion, { className, style })}>
+                                  <span>{suggestion.description}</span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </PlacesAutocomplete>
                     {this.renderErrorFor('start')}
                   </div>
 
                   <div className='form-group'>
-                    <label htmlFor='end'>End</label>
-                    <input
-                      id='end'
-                      type='text'
-                      className={`form-control ${this.hasErrorFor('end') ? 'is-invalid' : ''}`}
-                      name='end'
-                      value={this.state.end}
-                      onChange={this.handleFieldChange}
-                    />
+                    <label htmlFor='address2'>End</label>
+                    <PlacesAutocomplete
+                      id='address2'
+                      value={this.state.address2}
+                      onChange={this.handleChangeAddress2}
+                      onSelect={this.handleSelectAddress2}
+                    >
+                      {({ getInputProps, suggestions, getSuggestionItemProps }) => (
+                        <div>
+                          <input
+                            {...getInputProps({
+                              placeholder: 'Search Places ...',
+                              className: 'location-search-input form-control' + (this.hasErrorFor('end') ? ' is-invalid' : '')
+                            })}
+                          />
+                          <div className="autocomplete-dropdown-container">
+                            {suggestions.map(suggestion => {
+                              const className = suggestion.active ? 'suggestion-item--active' : 'suggestion-item';
+                              // inline style for demonstration purpose
+                              const style = suggestion.active
+                                          ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                          : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                              return (
+                                <div {...getSuggestionItemProps(suggestion, { className, style })}>
+                                  <span>{suggestion.description}</span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </PlacesAutocomplete>
                     {this.renderErrorFor('end')}
                   </div>
                   <button className='btn btn-primary'>Create</button>
