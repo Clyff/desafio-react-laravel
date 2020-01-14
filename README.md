@@ -14,13 +14,17 @@ You need this softwares and libraries instaled in your machine to run this appli
 
 On Windows, you need to properly install the docker machine and run the command from the root project:
 
+```bash
 $ bash build.sh
+```
 
 After that, set up the configuration for `src/.env` file. Check the laravel Docs for details and be sure you insert your `APP_GOOGLE_API_KEY`.
 
 Now run the command:
 
+```bash
 $ docker-compose exec app php artisan migrate
+```
 
 Once the docker images are mounted, you can access the project using the `docker-compose up -d` command.
 
@@ -28,13 +32,17 @@ Once the docker images are mounted, you can access the project using the `docker
 
 Run the following command:
 
+```bash
 $ cd src && cp .env.example .env && composer install && npm install
+```
 
 After that, set up the configuration for `src/.env` file. Check the laravel Docs for details and be sure you insert your `APP_GOOGLE_API_KEY`.
 
 Now run the command:
 
+```bash
 $ php artisan migrate
+```
 
 ## Docs
 
