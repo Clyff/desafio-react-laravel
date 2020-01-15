@@ -24,30 +24,42 @@ class ClientsList extends Component {
       <div className='container py-4'>
         <div className='row justify-content-center'>
           <div className='col-md-8'>
-            <div className='card'>
-              <div className='card-header'>All clients</div>
-              <div className='card-body'>
-                <Link className='btn btn-primary btn-sm mb-3' to='/clients/create'>
-                  Create new client
-                </Link>
-                <ul className='list-group list-group-flush'>
-                  {clients.map(client => (
-                    <li
-                      className='list-group-item d-flex justify-content-between'
-                      key={client.id}
-                    >
-                      {client.name}
+            <Link
+              className='btn btn-primary mb-3 float-right'
+              to='/clients/create'
+            >
+              Create new client
+            </Link>
+
+            <h3 className='mb-3'>All clients</h3>
+
+            <table className='table table-striped'>
+              <thead>
+                <tr>
+                  <th>#id</th>
+                  <th>Name</th>
+                  <th width='100'>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {clients.map(client => (
+                  <tr
+                    key={client.id}
+                  >
+                    <td>{client.id}</td>
+                    <td>{client.name}</td>
+                    <td>
                       <Link
                         to={`/clients/edit/${client.id}`}
                         className="btn btn-primary"
                       >
                         Edit
                       </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

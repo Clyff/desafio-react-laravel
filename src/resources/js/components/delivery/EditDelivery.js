@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
 
-class NewDelivery extends Component {
+class EditDelivery extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -21,16 +21,25 @@ class NewDelivery extends Component {
     this.handleSelectAddress1 = this.handleSelectAddress1.bind(this)
     this.handleChangeAddress2 = this.handleChangeAddress2.bind(this)
     this.handleSelectAddress2 = this.handleSelectAddress2.bind(this)
-    this.handleCreateNewDelivery = this.handleCreateNewDelivery.bind(this)
+    this.handleUpdate = this.handleUpdate.bind(this)
     this.hasErrorFor = this.hasErrorFor.bind(this)
     this.renderErrorFor = this.renderErrorFor.bind(this)
   }
 
   componentDidMount () {
-    axios.get(`/api/clients`)
+    const deliveryId = this.props.match.params.id;
+
+    axios.get(`/api/deliveries/edit/${deliveryId}`)
     .then(response => {
       this.setState({
-        clients: response.data
+        client_id: response.data.delivery.client_id,
+        date: response.data.delivery.date,
+        start: response.data.delivery.start,
+        end: response.data.delivery.end,
+        address1: response.data.delivery.start.formatted_address,
+        address2: response.data.delivery.end.formatted_address,
+        clients: response.data.clients,
+        errors: []
       })
     })
     .catch(function (error) {
@@ -78,10 +87,11 @@ class NewDelivery extends Component {
       .catch(error => console.error('Error', error))
   }
 
-  handleCreateNewDelivery (event) {
+  handleUpdate (event) {
     event.preventDefault()
 
-    const { history } = this.props
+    const { history } = this.props;
+    const deliveryId = this.props.match.params.id;
 
     const delivery = {
       client_id: this.state.client_id,
@@ -90,7 +100,7 @@ class NewDelivery extends Component {
       end: this.state.end
     }
 
-    axios.post('/api/deliveries', delivery)
+    axios.post(`/api/deliveries/edit/${deliveryId}`, delivery)
       .then(response => {
         // redirect to the homepage
         history.push('/deliveries')
@@ -122,11 +132,18 @@ class NewDelivery extends Component {
     return (
       <div className='container py-4'>
         <div className='row justify-content-center'>
-          <div className='col-md-6'>
-            <div className='card'>
-              <div className='card-header'>Create new delivery</div>
+          <div className='col-md-10'>
+            <Link
+              className='btn btn-primary mb-3 float-right'
+              to='/deliveries'
+            >
+              List deliveries
+            </Link>
+
+            <div className='card shadow-sm' style={{ width: '100%' }}>
+              <div className='card-header'>Update Delivery</div>
               <div className='card-body'>
-                <form onSubmit={this.handleCreateNewDelivery}>
+                <form onSubmit={this.handleUpdate}>
                   <div className='form-group'>
                     <label htmlFor='client_id'>Client</label>
                     <select 
@@ -233,7 +250,8 @@ class NewDelivery extends Component {
                     </PlacesAutocomplete>
                     {this.renderErrorFor('end')}
                   </div>
-                  <button className='btn btn-primary'>Create</button>
+
+                  <button className='btn btn-primary'>Update</button>
                 </form>
               </div>
             </div>
@@ -244,4 +262,4 @@ class NewDelivery extends Component {
   }
 }
 
-export default NewDelivery
+export default EditDelivery
