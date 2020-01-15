@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class NewClient extends Component {
   constructor (props) {
@@ -59,8 +60,19 @@ class NewClient extends Component {
     return (
       <div className='container py-4'>
         <div className='row justify-content-center'>
+          <div className='col-md-8'>
+            <Link
+              className='btn btn-primary mb-3 float-right'
+              to='/clients'
+            >
+              List clients
+            </Link>
+          </div>
+        </div>
+
+        <div className='row justify-content-center'>
           <div className='col-md-6'>
-            <div className='card'>
+            <div className='card shadow-sm' style={{ width: '100%' }}>
               <div className='card-header'>Create new client</div>
               <div className='card-body'>
                 <form onSubmit={this.handleCreateNewClient}>

@@ -2,8 +2,10 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import DatePicker from "react-datepicker";
+import { getDate, getMonth, getYear } from 'date-fns';
 
-class EditDelivery extends Component {
+class NewDelivery extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -11,35 +13,28 @@ class EditDelivery extends Component {
       date: '',
       start: '',
       end: '',
+      calendarDate: '',
       address1: '',
       address2: '',
       clients: [],
       errors: []
     }
     this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.handleChangeDate = this.handleChangeDate.bind(this)
     this.handleChangeAddress1 = this.handleChangeAddress1.bind(this)
     this.handleSelectAddress1 = this.handleSelectAddress1.bind(this)
     this.handleChangeAddress2 = this.handleChangeAddress2.bind(this)
     this.handleSelectAddress2 = this.handleSelectAddress2.bind(this)
-    this.handleUpdate = this.handleUpdate.bind(this)
+    this.handleCreateNewDelivery = this.handleCreateNewDelivery.bind(this)
     this.hasErrorFor = this.hasErrorFor.bind(this)
     this.renderErrorFor = this.renderErrorFor.bind(this)
   }
 
   componentDidMount () {
-    const deliveryId = this.props.match.params.id;
-
-    axios.get(`/api/deliveries/edit/${deliveryId}`)
+    axios.get(`/api/clients`)
     .then(response => {
       this.setState({
-        client_id: response.data.delivery.client_id,
-        date: response.data.delivery.date,
-        start: response.data.delivery.start,
-        end: response.data.delivery.end,
-        address1: response.data.delivery.start.formatted_address,
-        address2: response.data.delivery.end.formatted_address,
-        clients: response.data.clients,
-        errors: []
+        clients: response.data
       })
     })
     .catch(function (error) {
@@ -52,6 +47,25 @@ class EditDelivery extends Component {
       [event.target.name]: event.target.value
     })
   }
+
+  handleChangeDate (date) {
+    let year = getYear(date);
+    let month = getMonth(date) + 1;
+    let day = getDate(date);
+
+    if (month < 10) {
+      month = '0' + month;
+    } if (day < 10) {
+      day = '0' + day;
+    }
+
+    let converted_date = year + '-' + month + '-' + day;
+
+    this.setState({
+      date: converted_date,
+      calendarDate: date
+    });
+  };
 
   handleChangeAddress1 (address) {
     this.setState({ address1: address });
@@ -87,11 +101,10 @@ class EditDelivery extends Component {
       .catch(error => console.error('Error', error))
   }
 
-  handleUpdate (event) {
+  handleCreateNewDelivery (event) {
     event.preventDefault()
 
-    const { history } = this.props;
-    const deliveryId = this.props.match.params.id;
+    const { history } = this.props
 
     const delivery = {
       client_id: this.state.client_id,
@@ -100,7 +113,7 @@ class EditDelivery extends Component {
       end: this.state.end
     }
 
-    axios.post(`/api/deliveries/edit/${deliveryId}`, delivery)
+    axios.post('/api/deliveries', delivery)
       .then(response => {
         // redirect to the homepage
         history.push('/deliveries')
@@ -119,7 +132,7 @@ class EditDelivery extends Component {
   renderErrorFor (field) {
     if (this.hasErrorFor(field)) {
       return (
-        <span className='invalid-feedback'>
+        <span className='invalid-feedback' style={{ display: 'block' }}>
           <strong>{this.state.errors[field][0]}</strong>
         </span>
       )
@@ -132,11 +145,18 @@ class EditDelivery extends Component {
     return (
       <div className='container py-4'>
         <div className='row justify-content-center'>
-          <div className='col-md-6'>
-            <div className='card'>
-              <div className='card-header'>Update Delivery</div>
+          <div className='col-md-10'>
+            <Link
+              className='btn btn-primary mb-3 float-right'
+              to='/deliveries'
+            >
+              List deliveries
+            </Link>
+
+            <div className='card shadow-sm' style={{ width: '100%' }}>
+              <div className='card-header'>Create new delivery</div>
               <div className='card-body'>
-                <form onSubmit={this.handleUpdate}>
+                <form onSubmit={this.handleCreateNewDelivery}>
                   <div className='form-group'>
                     <label htmlFor='client_id'>Client</label>
                     <select 
@@ -160,14 +180,13 @@ class EditDelivery extends Component {
                   </div>
 
                   <div className='form-group'>
-                    <label htmlFor='date'>{`Date`}</label>
-                    <input
+                    <label htmlFor='date'>{`Date`}</label><br />
+                    <DatePicker
                       id='date'
-                      type='text'
+                      dateFormat='dd/MM/yyyy'
                       className={`form-control ${this.hasErrorFor('date') ? 'is-invalid' : ''}`}
-                      name='date'
-                      value={this.state.date}
-                      onChange={this.handleFieldChange}
+                      selected={this.state.calendarDate}
+                      onChange={this.handleChangeDate}
                     />
                     {this.renderErrorFor('date')}
                   </div>
@@ -243,8 +262,7 @@ class EditDelivery extends Component {
                     </PlacesAutocomplete>
                     {this.renderErrorFor('end')}
                   </div>
-
-                  <button className='btn btn-primary'>Update</button>
+                  <button className='btn btn-primary'>Create</button>
                 </form>
               </div>
             </div>
@@ -255,4 +273,4 @@ class EditDelivery extends Component {
   }
 }
 
-export default EditDelivery
+export default NewDelivery

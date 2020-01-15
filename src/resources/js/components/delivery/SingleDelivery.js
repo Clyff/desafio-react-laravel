@@ -71,7 +71,7 @@ class SingleDelivery extends Component {
 
       myMap = <div className='py-4'>
         <GoogleMapExample
-          containerElement={ <div className='z-depth-1-half map-container' style={{ height: `500px` }} /> }
+          containerElement={ <div className='shadow map-container' style={{ height: `500px` }} /> }
           mapElement={ <div style={{ height: `100%` }} /> }
         />
       </div>
@@ -79,32 +79,48 @@ class SingleDelivery extends Component {
 
     return (
       <div className='container'>
-        <div className='py-4'>
-          <div className="table-responsive-sm">
-            <table className="table">
-              <tbody>
-                <tr>
-                  <th>Client</th>
-                  <td>{this.state.client.name}</td>
-                </tr>
-                <tr>
-                  <th>Date</th>
-                  <td>{this.state.date}</td>
-                </tr>
-                <tr>
-                  <th>Start</th>
-                  <td>{this.state.start.formatted_address}</td>
-                </tr>
-                <tr>
-                  <th>End</th>
-                  <td>{this.state.end.formatted_address}</td>
-                </tr>
-              </tbody>
-            </table>
+        <div className='row justify-content-center py-4'>
+          <div className='col-md-10'>
+            <Link
+              className='btn btn-primary mb-3 float-right'
+              to='/deliveries'
+            >
+              List deliveries
+            </Link>
+
+            <Link
+              className='btn btn-primary mb-3 float-right mr-2'
+              to={`/deliveries/edit/${this.props.match.params.id}`}
+            >
+              Edit delivery
+            </Link>
+
+            <div className="table-responsive-sm">
+              <table className="table">
+                <tbody>
+                  <tr>
+                    <th>Client</th>
+                    <td>{this.state.client.name}</td>
+                  </tr>
+                  <tr>
+                    <th>Date</th>
+                    <td>{this.state.date}</td>
+                  </tr>
+                  <tr>
+                    <th>Start</th>
+                    <td>{this.state.start.formatted_address}</td>
+                  </tr>
+                  <tr>
+                    <th>End</th>
+                    <td>{this.state.end.formatted_address}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {myMap}
           </div>
         </div>
-
-        {myMap}
       </div>
     )
   }
