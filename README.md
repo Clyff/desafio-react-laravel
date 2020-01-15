@@ -52,5 +52,7 @@ List of documentations and tutorials used to create this application:
 - [Google maps plataform](https://cloud.google.com/maps-platform/?hl=pt-br)
 - [react-google-maps](https://www.npmjs.com/package/react-google-maps)
 - [react-places-autocomplete](https://www.npmjs.com/package/react-places-autocomplete)
+- [react-datepicker](https://www.npmjs.com/package/react-datepicker)
+- [date-fns](https://date-fns.org/)
 - [How To Set Up Laravel, Nginx, and MySQL with Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-set-up-laravel-nginx-and-mysql-with-docker-compose)
 - [Using React in a Laravel application](https://blog.pusher.com/react-laravel-application/)
