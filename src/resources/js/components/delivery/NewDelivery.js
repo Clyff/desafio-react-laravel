@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import DatePicker from "react-datepicker";
+import { getDate, getMonth, getYear } from 'date-fns';
 
 class NewDelivery extends Component {
   constructor (props) {
@@ -11,12 +13,14 @@ class NewDelivery extends Component {
       date: '',
       start: '',
       end: '',
+      calendarDate: '',
       address1: '',
       address2: '',
       clients: [],
       errors: []
     }
     this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.handleChangeDate = this.handleChangeDate.bind(this)
     this.handleChangeAddress1 = this.handleChangeAddress1.bind(this)
     this.handleSelectAddress1 = this.handleSelectAddress1.bind(this)
     this.handleChangeAddress2 = this.handleChangeAddress2.bind(this)
@@ -43,6 +47,25 @@ class NewDelivery extends Component {
       [event.target.name]: event.target.value
     })
   }
+
+  handleChangeDate (date) {
+    let year = getYear(date);
+    let month = getMonth(date) + 1;
+    let day = getDate(date);
+
+    if (month < 10) {
+      month = '0' + month;
+    } if (day < 10) {
+      day = '0' + day;
+    }
+
+    let converted_date = year + '-' + month + '-' + day;
+
+    this.setState({
+      date: converted_date,
+      calendarDate: date
+    });
+  };
 
   handleChangeAddress1 (address) {
     this.setState({ address1: address });
@@ -109,7 +132,7 @@ class NewDelivery extends Component {
   renderErrorFor (field) {
     if (this.hasErrorFor(field)) {
       return (
-        <span className='invalid-feedback'>
+        <span className='invalid-feedback' style={{ display: 'block' }}>
           <strong>{this.state.errors[field][0]}</strong>
         </span>
       )
@@ -157,14 +180,13 @@ class NewDelivery extends Component {
                   </div>
 
                   <div className='form-group'>
-                    <label htmlFor='date'>{`Date`}</label>
-                    <input
+                    <label htmlFor='date'>{`Date`}</label><br />
+                    <DatePicker
                       id='date'
-                      type='text'
+                      dateFormat='dd/MM/yyyy'
                       className={`form-control ${this.hasErrorFor('date') ? 'is-invalid' : ''}`}
-                      name='date'
-                      value={this.state.date}
-                      onChange={this.handleFieldChange}
+                      selected={this.state.calendarDate}
+                      onChange={this.handleChangeDate}
                     />
                     {this.renderErrorFor('date')}
                   </div>
